@@ -181,7 +181,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <div class="field"><label>Email / อีเมล <span class="req">*</span></label><input type="email" name="email" placeholder="email@example.com"></div>
         <div class="field"><label>Phone / เบอร์โทร <span class="req">*</span></label><input type="text" name="phone" placeholder="0x-xxxx-xxxx"></div>
         <div class="field"><label>Project Name / ชื่อโปรเจก <span class="req">*</span></label><input type="text" name="project_name" placeholder="e.g. Ceramic décor for hotel"></div>
-        <div class="field"><label>Submission Date / วันที่ส่งแบบฟอร์ม</label><input type="date" name="submission_date"></div>
+        <div class="field"><label>Client Design Brief Submission Date</label><input type="date" name="submission_date"></div>
+        <div class="field"><label>Target Completion Date / วันที่ต้องการเสร็จ</label><input type="date" name="target_completion_date"></div>
       </div>
       <div class="divider" style="margin:14px 0"></div>
       <div class="field">
@@ -369,9 +370,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <label>Internal Notes / หมายเหตุภายใน <span class="opt">(for team / สำหรับทีม)</span></label>
         <textarea name="internal_notes" placeholder="เหตุผลในการตั้งราคา ความเสี่ยง ข้อสังเกตพิเศษ..."></textarea>
       </div>
-      <div class="grid2" style="margin-top:14px">
-        <div class="field"><label>Assessed by / ผู้ประเมิน</label><input type="text" name="assessed_by" placeholder="Full name / ชื่อ-นามสกุล"></div>
-        <div class="field"><label>Assessment Date / วันที่ประเมิน</label><input type="date" name="assessment_date"></div>
+      <div class="field" style="margin-top:14px">
+        <label>Assessed by / ผู้ประเมิน</label><input type="text" name="assessed_by" placeholder="Full name / ชื่อ-นามสกุล">
       </div>
     </div>
   </div>
