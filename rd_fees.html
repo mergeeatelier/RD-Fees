@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R&D Fee Assessment</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a2e;font-size:15px;line-height:1.6}
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+.page-header{padding:40px 44px 28px;border-bottom:1px solid #e8e8e8;background:#fff}
+.page-header .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d5af1;margin-bottom:6px}
+.page-header h1{font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:8px}
+.page-header p{color:#666;font-size:14px;max-width:560px}
+
+.form-body{padding:36px 44px;max-width:860px}
+
+.section{background:#fff;border:1px solid #e8e8e8;border-radius:12px;overflow:hidden;margin-bottom:20px}
+.sec-head{padding:16px 20px;display:flex;align-items:center;gap:12px}
+.sec-head.ink{background:#1a1a2e}
+.sec-head.gold{background:#b5862a}
+.sec-head.green{background:#1a7f5a}
+.sec-head.purple{background:#4a3aaa}
+.sec-head.coral{background:#c04a2a}
+.sec-head h2{font-size:14px;font-weight:700;color:#fff;letter-spacing:.02em}
+.sec-head p{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px}
+.sec-body{padding:22px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.span2{grid-column:span 2}
+
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:#666;letter-spacing:.04em;text-transform:uppercase}
+.field label .req{color:#c0392b;margin-left:2px}
+.field label .opt{font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:#aaa;margin-left:4px}
+
+input[type=text],input[type=email],input[type=number],input[type=date],select,textarea{
+  width:100%;padding:10px 13px;border:1.5px solid #e2e2ef;border-radius:8px;
+  font-family:'Sarabun',sans-serif;font-size:14px;color:#1a1a2e;background:#fff;
+  transition:border-color .15s,box-shadow .15s;appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#3d5af1;box-shadow:0 0 0 3px rgba(61,90,241,.1)}
+textarea{resize:vertical;min-height:72px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+
+.score-table{width:100%;border-collapse:collapse;border:1.5px solid #e2e2ef;border-radius:10px;overflow:hidden}
+.score-table thead tr{background:#1a1a2e}
+.score-table thead th{padding:11px 14px;font-size:12px;font-weight:600;color:#fff;text-align:left;letter-spacing:.03em}
+.score-table thead th:not(:first-child){text-align:center;width:90px}
+.score-table tbody tr{border-bottom:1px solid #eee}
+.score-table tbody tr:last-child{border-bottom:none}
+.score-table tbody tr:nth-child(even){background:#fafafd}
+.score-table td{padding:12px 14px;font-size:13px;vertical-align:middle}
+.score-table td:not(:first-child){text-align:center}
+.score-table .factor-name{font-weight:600;color:#1a1a2e;display:block}
+.score-table .factor-desc{font-size:11px;color:#999;margin-top:2px;display:block}
+
+.score-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid #e2e2ef;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:#888;transition:all .15s;display:inline-flex;align-items:center;justify-content:center}
+.score-btn:hover{background:#f0f3fe;border-color:#3d5af1;color:#3d5af1}
+.score-btn.s1{background:#e8f4fd;border-color:#5b9bd5;color:#1a5fa8}
+.score-btn.s2{background:#e8f7f0;border-color:#5bbf94;color:#1a7f5a}
+.score-btn.s3{background:#fdf4e8;border-color:#d4a045;color:#8a5a0a}
+
+.check-group{display:flex;flex-wrap:wrap;gap:5px}
+.check-group label{display:flex;align-items:center;gap:5px;padding:4px 10px;border:1.5px solid #e2e2ef;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:#666;transition:all .15s}
+.check-group label:has(input:checked){border-color:#3d5af1;background:#f0f3fe;color:#3d5af1}
+.check-group input{accent-color:#3d5af1}
+
+.radio-group{display:flex;flex-wrap:wrap;gap:5px}
+.radio-group label{display:flex;align-items:center;gap:5px;padding:4px 10px;border:1.5px solid #e2e2ef;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:#666;transition:all .15s}
+.radio-group label:has(input:checked){border-color:#3d5af1;background:#f0f3fe;color:#3d5af1}
+.radio-group input{accent-color:#3d5af1}
+
+.fee-card{background:linear-gradient(135deg,#1a1a2e 0%,#2d2d54 100%);border-radius:12px;padding:26px;color:#fff}
+.fee-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:5px}
+.fee-amount{font-size:34px;font-weight:700;color:#fff;line-height:1}
+.fee-range{font-size:13px;color:rgba(255,255,255,.55);margin-top:4px}
+.fee-tier{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:10px}
+.tier-low{background:rgba(91,155,213,.25);color:#a8d0f0}
+.tier-mid{background:rgba(91,191,148,.25);color:#7dcea0}
+.tier-high{background:rgba(212,160,69,.25);color:#f0c060}
+.fee-breakdown{margin-top:18px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;display:grid;gap:9px}
+.fee-row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.fee-row .fl{color:rgba(255,255,255,.6)}
+.fee-row .fv{font-weight:600;color:#8fa8f8}
+
+.legend-row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#666}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+.hint{font-size:12px;color:#aaa;margin-top:10px;line-height:1.5}
+.divider{height:1px;background:#eee;margin:6px 0}
+
+.submit-row{padding:24px 44px;border-top:1px solid #e8e8e8;background:#fff;position:sticky;bottom:0;display:flex;gap:10px;align-items:center}
+.btn-primary{padding:12px 28px;background:#3d5af1;color:#fff;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:#2a46e0;transform:translateY(-1px);box-shadow:0 4px 14px rgba(61,90,241,.3)}
+.btn-secondary{padding:12px 20px;background:none;color:#666;border:1.5px solid #e2e2ef;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-secondary:hover{border-color:#1a1a2e;color:#1a1a2e}
+.submit-row .note{font-size:12px;color:#aaa;margin-left:auto}
+
+.success-overlay{display:none;position:fixed;inset:0;background:#fff;z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center}
+.success-overlay .s-icon{font-size:56px;margin-bottom:18px}
+.success-overlay h2{font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:10px}
+.success-overlay p{color:#666;max-width:440px;margin-bottom:24px}
+
+@media(max-width:680px){
+  .page-header,.form-body,.submit-row{padding-left:18px;padding-right:18px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .span2{grid-column:span 1}
+  .score-table thead th:not(:first-child){width:70px}
+}
+@media print{
+  @page{size:A4;margin:12mm 14mm}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+
+  body{background:#fff;font-size:10px}
+  .submit-row{display:none}
+
+  .page-header{padding:14px 18px 12px;border-bottom:1px solid #ddd}
+  .page-header .eyebrow{font-size:8px}
+  .page-header h1{font-size:16px;margin-bottom:4px}
+  .page-header p{font-size:9px}
+
+  .form-body{padding:12px 18px;max-width:100%}
+
+  .section{margin-bottom:10px;border-radius:8px;break-inside:avoid}
+  .sec-head{padding:8px 12px}
+  .sec-head h2{font-size:10px}
+  .sec-head p{font-size:8px}
+  .sec-body{padding:10px 12px}
+
+  .grid2{gap:8px}
+  .grid3{gap:8px}
+  .field{gap:3px}
+  .field label{font-size:8px}
+
+  input[type=text],input[type=email],input[type=number],input[type=date],select,textarea{
+    padding:5px 8px;font-size:10px;border-color:#ccc}
+  textarea{min-height:40px}
+
+  .score-table thead th{padding:6px 8px;font-size:9px}
+  .score-table td{padding:6px 8px;font-size:9px}
+  .score-table .factor-name{font-size:9px}
+  .score-table .factor-desc{font-size:8px}
+  .score-btn{width:24px;height:24px;font-size:10px}
+  .legend-row{gap:8px;margin-bottom:8px}
+  .legend-item{font-size:8px}
+
+  .fee-card{padding:14px;border-radius:8px}
+  .fee-label{font-size:8px}
+  .fee-amount{font-size:20px}
+  .fee-range{font-size:9px}
+  .fee-row{font-size:9px}
+  .hint{font-size:8px;margin-top:6px}
+
+  .check-group label{padding:2px 7px;font-size:9px}
+  .radio-group label{padding:2px 7px;font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Form 01 · R&D Fee Assessment</div>
+  <h1>R&D Fee Assessment</h1>
+  <p>Fill in project details and score each factor to estimate R&D fees / กรอกข้อมูลโปรเจกและให้คะแนนเพื่อคำนวณค่า R&D</p>
+</div>
+
+<div class="form-body">
+
+  <!-- A: CLIENT INFO -->
+  <div class="section">
+    <div class="sec-head ink">
+      <div><h2>Client Info - ข้อมูลลูกค้า</h2><p>Basic project reference / ข้อมูลพื้นฐานสำหรับอ้างอิง</p></div>
+    </div>
+    <div class="sec-body">
+      <div class="grid2">
+        <div class="field"><label>Company / ชื่อลูกค้า - บริษัท <span class="req">*</span></label><input type="text" name="company" placeholder="เช่น คุณสมชาย / บริษัท ABC"></div>
+        <div class="field"><label>Contact Person / ผู้ติดต่อ <span class="req">*</span></label><input type="text" name="contact_person" placeholder="Full name / ชื่อ-นามสกุล"></div>
+        <div class="field"><label>Email / อีเมล <span class="req">*</span></label><input type="email" name="email" placeholder="email@example.com"></div>
+        <div class="field"><label>Phone / เบอร์โทร <span class="req">*</span></label><input type="text" name="phone" placeholder="0x-xxxx-xxxx"></div>
+        <div class="field"><label>Project Name / ชื่อโปรเจก <span class="req">*</span></label><input type="text" name="project_name" placeholder="e.g. Ceramic décor for hotel"></div>
+        <div class="field"><label>Submission Date / วันที่ส่งแบบฟอร์ม</label><input type="date" name="submission_date"></div>
+      </div>
+      <div class="divider" style="margin:14px 0"></div>
+      <div class="field">
+        <label>Product Type / ประเภทสินค้า <span class="req">*</span></label>
+        <select id="productType" name="product_type" onchange="calcFee()">
+          <option value="">— Select type / เลือกประเภท —</option>
+          <option value="deco">Decorative Art / งานศิลปะตกแต่ง - ของสะสม</option>
+          <option value="lifestyle">Art Lifestyle / สินค้า Lifestyle เชิงศิลปะ</option>
+          <option value="collab">Artist Collaboration / งาน Collaboration กับศิลปิน</option>
+          <option value="custom">Custom / Commission / งานตามสั่ง</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Project Details / รายละเอียดโปรเจก</label>
+        <textarea name="project_details" placeholder="อธิบายสั้นๆ ว่าต้องการพัฒนาอะไร ใช้งานอย่างไร สำหรับใคร..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- B: COMPLEXITY MATRIX -->
+  <div class="section">
+    <div class="sec-head gold">
+      <div><h2>Complexity Matrix - ประเมินความซับซ้อน</h2><p>Score 1–3 per factor to calculate fee multiplier / ให้คะแนน 1–3 ในแต่ละปัจจัย</p></div>
+    </div>
+    <div class="sec-body">
+      <div class="legend-row">
+        <div class="legend-item"><div class="legend-dot" style="background:#5b9bd5"></div>1 = Straightforward / ตรงไปตรงมา</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5bbf94"></div>2 = Moderate effort / ต้องพัฒนาพอสมควร</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d4a045"></div>3 = Highly complex / ซับซ้อนสูง</div>
+      </div>
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>Factor / ปัจจัย</th>
+            <th>1<br><span style="font-weight:400;font-size:11px;color:rgba(255,255,255,.6)">Low</span></th>
+            <th>2<br><span style="font-weight:400;font-size:11px;color:rgba(255,255,255,.6)">Mid</span></th>
+            <th>3<br><span style="font-weight:400;font-size:11px;color:rgba(255,255,255,.6)">High</span></th>
+          </tr>
+        </thead>
+        <tbody id="matrixBody">
+          <tr><td><span class="factor-name">Brief Interpretation / ความยากในการตีความ Brief</span><span class="factor-desc">Clear reference, ready to go → Must interpret and create everything from scratch</span></td><td><button class="score-btn" data-g="f1" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f1" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f1" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Novelty / ความใหม่ของงาน</span><span class="factor-desc">Similar to past work → Never developed before / คล้ายงานเดิม vs ไม่เคยพัฒนามาก่อน</span></td><td><button class="score-btn" data-g="f2" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f2" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f2" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Material Rarity / ความหายากของวัสดุ</span><span class="factor-desc">Use existing materials → Must source / trial special materials / ใช้วัสดุที่มีอยู่ vs ต้องหาวัสดุพิเศษ</span></td><td><button class="score-btn" data-g="f3" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f3" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f3" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Technical Complexity / ความซับซ้อนของเทคนิค</span><span class="factor-desc">Known technique → Must develop new technique / เทคนิคที่ถนัด vs ต้องพัฒนาเทคนิคใหม่</span></td><td><button class="score-btn" data-g="f4" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f4" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f4" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">R&D Iterations / รอบการทดลองและพัฒนา</span><span class="factor-desc">Single attempt → 3–5+ rounds of testing / ทำครั้งเดียว vs ต้องลอง 3–5+ รอบ</span></td><td><button class="score-btn" data-g="f5" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f5" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f5" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Restart Risk / ความเสี่ยงที่ต้องเริ่มใหม่</span><span class="factor-desc">Low chance of failure → High risk of restarting the entire process</span></td><td><button class="score-btn" data-g="f6" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f6" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f6" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Customization Level / ระดับ Customization</span><span class="factor-desc">Standard work → Fully custom for this client only</span></td><td><button class="score-btn" data-g="f7" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f7" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f7" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Feedback Rounds / รอบ Feedback และแก้ไข</span><span class="factor-desc">Estimated number of presentation and revision rounds</span></td><td><button class="score-btn" data-g="f8" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f8" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f8" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">R&D Duration / ระยะเวลา R&D</span><span class="factor-desc">Under 2 weeks / 1 month / over 1 month</span></td><td><button class="score-btn" data-g="f9" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f9" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f9" data-v="3" onclick="setScore(this)">3</button></td></tr>
+          <tr><td><span class="factor-name">Human Resources / ทรัพยากรบุคคล</span><span class="factor-desc">Solo / 2–3 people / Must hire external specialist</span></td><td><button class="score-btn" data-g="f10" data-v="1" onclick="setScore(this)">1</button></td><td><button class="score-btn" data-g="f10" data-v="2" onclick="setScore(this)">2</button></td><td><button class="score-btn" data-g="f10" data-v="3" onclick="setScore(this)">3</button></td></tr>
+        </tbody>
+        <tfoot>
+          <tr style="background:#f0f3fe">
+            <td style="padding:12px 14px;font-size:13px;font-weight:700;color:#3d5af1">Total Score / คะแนนรวม (30 pts)</td>
+            <td colspan="3" style="text-align:center;font-size:18px;font-weight:700;color:#3d5af1" id="totalScore">0 / 30</td>
+          </tr>
+        </tfoot>
+      </table>
+      <p class="hint">Score each row — fee will calculate automatically below / กดคะแนนในแต่ละแถว — ราคาจะคำนวณอัตโนมัติ</p>
+    </div>
+  </div>
+
+  <!-- C: SCOPE -->
+  <div class="section">
+    <div class="sec-head green">
+      <div><h2>Scope & Deliverables - ขอบเขตงาน</h2><p>Define deliverables and timeline / กำหนดสิ่งที่ต้องการรับมอบและ timeline</p></div>
+    </div>
+    <div class="sec-body">
+      <div class="grid2">
+        <div class="field">
+          <label>R&D Phase / ระยะ R&D ที่ต้องการ <span class="req">*</span></label>
+          <select id="scopeType" name="scope" onchange="calcFee()">
+            <option value="">— Select / เลือก —</option>
+            <option value="concept">Concept Only / แค่แนวคิด</option>
+            <option value="concept_sample">Concept + Sample / Concept + ตัวอย่าง</option>
+            <option value="full">Full Development / พัฒนาจนผลิตได้จริง</option>
+            <option value="full_support">Development + Outsource Support / พัฒนา + ดูแลการผลิต</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Timeline <span class="req">*</span></label>
+          <select name="timeline" onchange="calcFee()">
+            <option value="">— Select / เลือก —</option>
+            <option value="rush">Rush — within 2 weeks (+30%) / เร่งด่วน ภายใน 2 สัปดาห์</option>
+            <option value="normal">Normal — 1–2 months / ปกติ 1–2 เดือน</option>
+            <option value="flex">Flexible — 2–4 months / ยืดหยุ่น 2–4 เดือน</option>
+            <option value="long">Long-term — 4+ months / ระยะยาว 4+ เดือน</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Additional Deliverables / สิ่งที่ต้องการรับมอบเพิ่มเติม</label>
+        <div class="check-group">
+          <label><input type="checkbox" name="deliverables" value="Concept Sketch"> Concept Sketch</label>
+          <label><input type="checkbox" name="deliverables" value="Technical Drawing"> Technical Drawing</label>
+          <label><input type="checkbox" name="deliverables" value="3D / CAD"> 3D / CAD</label>
+          <label><input type="checkbox" name="deliverables" value="Prototype"> Prototype</label>
+          <label><input type="checkbox" name="deliverables" value="BOM"> Bill of Materials (BOM) / รายการวัสดุ</label>
+          <label><input type="checkbox" name="deliverables" value="Supplier"> Supplier</label>
+          <label><input type="checkbox" name="deliverables" value="Production Process"> Production Process / กระบวนการผลิต</label>
+          <label><input type="checkbox" name="deliverables" value="Test Report"> Test Report / รายงานการทดสอบ</label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Special Conditions / ข้อจำกัดหรือเงื่อนไขพิเศษ <span class="opt">(if any / ถ้ามี)</span></label>
+        <textarea name="special_conditions" placeholder="เช่น งบประมาณสูงสุด ขนาดที่ต้องการ วัสดุที่ใช้ไม่ได้..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- D: BUDGET & IP -->
+  <div class="section">
+    <div class="sec-head purple">
+      <div><h2>Budget & IP - งบประมาณและลิขสิทธิ์</h2><p>Budget framework and IP rights / กรอบงบและสิทธิ์ในผลงาน</p></div>
+    </div>
+    <div class="sec-body">
+      <div class="grid2">
+        <div class="field">
+          <label>Budget per Production Run / งบประมาณต่อ 1 การผลิต <span class="opt">(approx / โดยประมาณ)</span></label>
+          <select name="budget_run">
+            <option value="">— Select / เลือก —</option>
+            <option>Under ฿20,000 / ต่ำกว่า 20,000 บาท</option>
+            <option>฿20,000 – 50,000</option>
+            <option>฿50,000 – 100,000</option>
+            <option>฿100,000 – 250,000</option>
+            <option>Over ฿250,000 / มากกว่า 250,000 บาท</option>
+            <option>Not yet determined / ยังไม่ได้กำหนด</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Expected Cost per Unit / งบประมาณที่คาดหวังต่อ 1 ชิ้นสินค้า</label>
+          <input type="text" name="cost_per_unit" placeholder="เช่น 500 บาท / ชิ้น">
+        </div>
+        <div class="field span2">
+          <label>Intellectual Property (IP) / สิทธิ์ในผลงาน <span class="req">*</span></label>
+          <select name="ip" onchange="calcFee()">
+            <option value="">— Select / เลือก —</option>
+            <option value="client_own">Client-owned IP (client provided) / ลูกค้าเป็นเจ้าของสิทธิ์</option>
+            <option value="license">Studio-held License / บริษัทถือ - ให้ใช้งานผ่าน license</option>
+            <option value="ours">Studio-owned / บริษัทเป็นเจ้าของทั้งหมด</option>
+            <option value="tbd">To be agreed / ค่อยตกลงกัน</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>NDA / สัญญาความลับ</label>
+          <div class="radio-group">
+            <label><input type="radio" name="nda" value="Signed"> Signed / ลงนามแล้ว</label>
+            <label><input type="radio" name="nda" value="Pending"> Pending / รอดำเนินการ</label>
+            <label><input type="radio" name="nda" value="Not required"> Not required / ไม่จำเป็น</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Payment Terms / รูปแบบการชำระเงิน</label>
+          <div class="radio-group">
+            <label><input type="radio" name="payment" value="50/50"> 50% Upfront / 50% on Completion</label>
+            <label><input type="radio" name="payment" value="Full upfront"> Full Payment Upfront / เต็มจำนวนก่อน</label>
+            <label><input type="radio" name="payment" value="TBD"> To be agreed / ค่อยตกลง</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E: FEE ESTIMATE -->
+  <div class="section">
+    <div class="sec-head coral">
+      <div><h2>Fee Estimate - ประมาณค่า R&D</h2><p>Auto-calculated from above / คำนวณอัตโนมัติจากข้อมูลด้านบน</p></div>
+    </div>
+    <div class="sec-body">
+      <div class="fee-card">
+        <div class="fee-label">Estimated R&D Fee / ค่า R&D โดยประมาณ</div>
+        <div class="fee-amount" id="feeAmount">— Please fill in details</div>
+        <div class="fee-range" id="feeRange">Select product type and score at least 5 factors / เลือกประเภทสินค้าและให้คะแนนอย่างน้อย 5 ปัจจัย</div>
+        <div id="feeTier"></div>
+        <div class="fee-breakdown" id="feeBreakdown" style="display:none">
+          <div class="fee-row"><span class="fl">Base Fee (ตามประเภทสินค้า)</span><span class="fv" id="fb1">—</span></div>
+          <div class="fee-row"><span class="fl">Complexity Multiplier (คะแนน <span id="fb_score">—</span>/30)</span><span class="fv" id="fb2">—</span></div>
+          <div class="fee-row"><span class="fl">Scope Factor (ระยะ R&D)</span><span class="fv" id="fb_sc">—</span></div>
+          <div class="fee-row"><span class="fl">Timeline Factor</span><span class="fv" id="fb3">—</span></div>
+          <div class="fee-row"><span class="fl">IP Adjustment</span><span class="fv" id="fb4">—</span></div>
+        </div>
+      </div>
+      <p class="hint">⚠️ This is a preliminary estimate only. <strong>Material costs not included.</strong> Final price confirmed after team review and client discussion / ราคานี้เป็นการประมาณเบื้องต้น ไม่รวมค่าวัสดุทดลอง</p>
+      <div class="field" style="margin-top:14px">
+        <label>Internal Notes / หมายเหตุภายใน <span class="opt">(for team / สำหรับทีม)</span></label>
+        <textarea name="internal_notes" placeholder="เหตุผลในการตั้งราคา ความเสี่ยง ข้อสังเกตพิเศษ..."></textarea>
+      </div>
+      <div class="grid2" style="margin-top:14px">
+        <div class="field"><label>Assessed by / ผู้ประเมิน</label><input type="text" name="assessed_by" placeholder="Full name / ชื่อ-นามสกุล"></div>
+        <div class="field"><label>Assessment Date / วันที่ประเมิน</label><input type="date" name="assessment_date"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="submit-row">
+  <button class="btn-primary" onclick="submitForm()">Submit Assessment / ส่งแบบประเมิน →</button>
+  <button class="btn-secondary" onclick="window.print()">Print / PDF</button>
+  <span class="note">All information is confidential / ข้อมูลทั้งหมดถือเป็นความลับ</span>
+</div>
+
+<div id="succ" class="success-overlay">
+  <div class="s-icon">✓⃝</div>
+  <h2>Assessment Submitted / ส่งแบบประเมินเรียบร้อย</h2>
+  <p style="font-size:13px">Our team will review and send an R&D fee proposal within 2 business days / ทีมจะ review ข้อมูลและส่งใบเสนอราคาค่า R&D ให้ภายใน 2 วันทำการ</p>
+  <button onclick="document.getElementById('succ').style.display='none'" style="padding:12px 28px;background:#444;color:#fff;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer">Back to Form / กลับหน้าฟอร์ม</button>
+</div>
+
+<script>
+// SCORES
+const scores={};
+function setScore(btn){
+  const g=btn.dataset.g,v=parseInt(btn.dataset.v);
+  scores[g]=v;
+  document.querySelectorAll(`.score-btn[data-g="${g}"]`).forEach(b=>{
+    b.classList.remove('s1','s2','s3');
+    if(parseInt(b.dataset.v)<=v)b.classList.add('s'+v);
+  });
+  const total=Object.values(scores).reduce((s,x)=>s+x,0);
+  document.getElementById('totalScore').textContent=total+' / 30';
+  calcFee();
+}
+
+// FEE CALC
+const BASE={deco:18000,lifestyle:22000,collab:30000,custom:22500};
+const SCOPE={concept:0.6,concept_sample:0.85,full:1.0,full_support:1.5};
+const TIMELINE={rush:1.3,normal:1.0,flex:0.9,long:0.85};
+const IP={client_own:1.0,license:0.9,ours:0.8,tbd:1.0};
+
+function calcFee(){
+  const type=document.getElementById('productType').value;
+  const filled=Object.keys(scores).length;
+  if(!type||filled<5){
+    document.getElementById('feeAmount').textContent='— Please fill in details';
+    document.getElementById('feeRange').textContent=`เลือกประเภทสินค้าและให้คะแนนอย่างน้อย 5 ปัจจัย (ตอนนี้: ${filled}/10)`;
+    document.getElementById('feeBreakdown').style.display='none';
+    document.getElementById('feeTier').innerHTML='';
+    return;
+  }
+  const total=Object.values(scores).reduce((s,x)=>s+x,0);
+  const base=BASE[type]||18000;
+  const mult=Math.max(0.75,0.5+(total-5)*(1.5/25));
+  let tl=1;
+  document.querySelectorAll('select[name=timeline]').forEach(s=>{if(TIMELINE[s.value])tl=TIMELINE[s.value];});
+  let ip=1;
+  document.querySelectorAll('select[name=ip]').forEach(s=>{if(IP[s.value])ip=IP[s.value];});
+  let sc=1;
+  const scSel=document.getElementById('scopeType');
+  if(scSel&&SCOPE[scSel.value])sc=SCOPE[scSel.value];
+  const est=Math.round(base*mult*tl*ip*sc/500)*500;
+  const lo=Math.round(est*0.8/500)*500;
+  const hi=Math.round(est*1.25/500)*500;
+  const fmt=v=>'฿'+v.toLocaleString('th-TH');
+  document.getElementById('feeAmount').textContent=fmt(est);
+  document.getElementById('feeRange').textContent=`ช่วงประมาณ ${fmt(lo)} – ${fmt(hi)}`;
+  let tc,tl2;
+  if(total<=10){tc='tier-low';tl2='ระดับต้น — งานตรงไปตรงมา';}
+  else if(total<=20){tc='tier-mid';tl2='ระดับกลาง — ต้องพัฒนาพอสมควร';}
+  else{tc='tier-high';tl2='ระดับสูง — ซับซ้อน ลงทุนสูง';}
+  document.getElementById('feeTier').innerHTML=`<div class="fee-tier ${tc}">● ${tl2}</div>`;
+  document.getElementById('fb1').textContent=fmt(base);
+  document.getElementById('fb_score').textContent=total;
+  document.getElementById('fb2').textContent='×'+mult.toFixed(2);
+  document.getElementById('fb_sc').textContent='×'+sc.toFixed(2);
+  document.getElementById('fb3').textContent='×'+tl.toFixed(2);
+  document.getElementById('fb4').textContent='×'+ip.toFixed(2);
+  document.getElementById('feeBreakdown').style.display='grid';
+}
+
+// ── วาง SheetDB URL ของคุณที่นี่ ──────────────────────────
+// สมัครฟรีที่ sheetdb.io → Create → เชื่อม Google Sheet
+// ตั้งชื่อ tab ใน Sheet ว่า "RD Fees"
+const SHEETDB_URL = 'https://script.google.com/macros/s/AKfycbxeYliQGhs7qpPSWwQ4nBKczlFxuT0_isNaAWUX6zvqo0-Twa-NlgbCksYvJZhk_Etf/exec';
+
+// COLLECT & SUBMIT TO GOOGLE SHEET
+function submitForm(){
+  const data={};
+  document.querySelectorAll('input[name],select[name],textarea[name]').forEach(el=>{
+    if(el.type==='checkbox'||el.type==='radio'){
+      if(el.checked) data[el.name]=(data[el.name]?data[el.name]+', ':'')+el.value;
+    } else if(el.type!=='color'){
+      data[el.name]=el.value;
+    }
+  });
+  data['complexity_scores']=Object.entries(scores).map(([k,v])=>k+':'+v).join(', ');
+  data['complexity_total']=String(Object.values(scores).reduce((s,x)=>s+x,0));
+  data['fee_estimate']=document.getElementById('feeAmount').textContent;
+  data['timestamp']=new Date().toLocaleString('th-TH');
+
+  const btn=document.querySelector('.btn-primary');
+  btn.textContent='Saving...';
+  btn.disabled=true;
+
+  fetch(SHEETDB_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'text/plain'},
+    body: JSON.stringify(data)
+  })
+  .then(()=>{
+    const s=document.getElementById('succ');
+    s.style.display='flex';s.style.flexDirection='column';
+    s.style.alignItems='center';s.style.justifyContent='center';
+  })
+  .catch(err => {
+    alert('ส่งข้อมูลไม่สำเร็จ: '+err.message);
+  })
+  .finally(()=>{
+    btn.textContent='Submit Assessment / ส่งแบบประเมิน →';
+    btn.disabled=false;
+  });
+}
+</script>
+</body>
+</html>
