@@ -112,6 +112,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .success-overlay h2{font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:10px}
 .success-overlay p{color:#666;max-width:440px;margin-bottom:24px}
 
+input[readonly]{background:#f5f5f5;color:#888;border-color:#e8e8e8;cursor:default}
+input[readonly]:focus{border-color:#e8e8e8;box-shadow:none}
 @media(max-width:680px){
   .page-header,.form-body,.submit-row{padding-left:18px;padding-right:18px}
   .grid2,.grid3{grid-template-columns:1fr}
@@ -197,7 +199,7 @@ function checkPw(){
 
 <div class="page-header">
   <div class="eyebrow">Form 01 · R&D Fee Assessment</div>
-  <h1>R&D Fee Assessment</h1>
+  <h1>R&D Fee Assessment<span id="title-pid" style="font-size:16px;font-weight:400;color:#3d5af1"></span></h1>
   <p>Fill in project details and score each factor to estimate R&D fees / กรอกข้อมูลโปรเจกและให้คะแนนเพื่อคำนวณค่า R&D</p>
 </div>
 
@@ -210,13 +212,19 @@ function checkPw(){
     </div>
     <div class="sec-body">
       <div class="grid2">
-        <div class="field"><label>Company / ชื่อลูกค้า - บริษัท <span class="req">*</span></label><input type="text" name="company" placeholder="เช่น คุณสมชาย / บริษัท ABC"></div>
-        <div class="field"><label>Contact Person / ผู้ติดต่อ <span class="req">*</span></label><input type="text" name="contact_person" placeholder="Full name / ชื่อ-นามสกุล"></div>
-        <div class="field"><label>Email / อีเมล <span class="req">*</span></label><input type="email" name="email" placeholder="email@example.com"></div>
-        <div class="field"><label>Phone / เบอร์โทร <span class="req">*</span></label><input type="text" name="phone" placeholder="0x-xxxx-xxxx"></div>
-        <div class="field"><label>Project Name / ชื่อโปรเจก <span class="req">*</span></label><input type="text" name="project_name" placeholder="e.g. Ceramic décor for hotel"></div>
-        <div class="field"><label>Client Design Brief Submission Date</label><input type="date" name="submission_date"></div>
-        <div class="field"><label>Target Completion Date / วันที่ต้องการเสร็จ</label><input type="date" name="target_completion_date"></div>
+        <div class="field">
+          <label>Project ID <span class="req">*</span> <span id="pid-status" style="font-size:11px;font-weight:400;color:#3d5af1;display:none"></span></label>
+          <input type="text" name="project_id" id="project_id" placeholder="e.g. PJ2026062701"
+            onblur="lookupProjectInfo()"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();lookupProjectInfo();}">
+        </div>
+        <div class="field"><label>Project Name / ชื่อโปรเจก</label><input type="text" name="project_name" id="f_project_name" placeholder="— ดึงข้อมูลอัตโนมัติ —" readonly tabindex="-1"></div>
+        <div class="field"><label>Company / ชื่อลูกค้า - บริษัท</label><input type="text" name="company" id="f_company" placeholder="— ดึงข้อมูลอัตโนมัติ —" readonly tabindex="-1"></div>
+        <div class="field"><label>Contact Person / ผู้ติดต่อ</label><input type="text" name="contact_person" id="f_contact_person" placeholder="— ดึงข้อมูลอัตโนมัติ —" readonly tabindex="-1"></div>
+        <div class="field"><label>Email / อีเมล</label><input type="email" name="email" id="f_email" placeholder="— ดึงข้อมูลอัตโนมัติ —" readonly tabindex="-1"></div>
+        <div class="field"><label>Phone / เบอร์โทร</label><input type="text" name="phone" id="f_phone" placeholder="— ดึงข้อมูลอัตโนมัติ —" readonly tabindex="-1"></div>
+        <div class="field"><label>Client Design Brief Submission Date</label><input type="date" name="submission_date" id="f_submission_date" readonly tabindex="-1"></div>
+        <div class="field"><label>Target Completion Date / วันที่ต้องการเสร็จ</label><input type="date" name="target_completion_date" id="f_target_completion_date" readonly tabindex="-1"></div>
       </div>
       <div class="divider" style="margin:14px 0"></div>
       <div class="field">
@@ -484,6 +492,43 @@ function calcFee(){
   document.getElementById('fb3').textContent='×'+tl.toFixed(2);
   document.getElementById('fb4').textContent='×'+ip.toFixed(2);
   document.getElementById('feeBreakdown').style.display='grid';
+}
+
+// ── Auto-fill: ดึงข้อมูลจาก Google Sheet เมื่อใส่ Project ID ──
+async function lookupProjectInfo() {
+  const pid = document.getElementById('project_id');
+  const statusEl = document.getElementById('pid-status');
+  if (!pid || !pid.value.trim()) return;
+
+  document.getElementById('title-pid').textContent = ' — ' + pid.value.trim();
+  statusEl.textContent = 'กำลังดึงข้อมูล...';
+  statusEl.style.display = 'inline';
+  statusEl.style.color = '#3d5af1';
+
+  try {
+    const url = SHEETDB_URL + '?action=project&id=' + encodeURIComponent(pid.value.trim());
+    const resp = await fetch(url, { redirect: 'follow' });
+    const data = await resp.json();
+
+    if (data.found) {
+      if (data.project_name)            document.getElementById('f_project_name').value            = data.project_name;
+      if (data.company)                 document.getElementById('f_company').value                 = data.company;
+      if (data.contact_person)          document.getElementById('f_contact_person').value           = data.contact_person;
+      if (data.email)                   document.getElementById('f_email').value                   = data.email;
+      if (data.phone)                   document.getElementById('f_phone').value                   = data.phone;
+      if (data.submission_date)         document.getElementById('f_submission_date').value         = data.submission_date;
+      if (data.target_completion_date)  document.getElementById('f_target_completion_date').value  = data.target_completion_date;
+      statusEl.textContent = '✓ พบข้อมูล';
+      statusEl.style.color = '#1a7f5a';
+      setTimeout(() => { statusEl.style.display = 'none'; }, 2500);
+    } else {
+      statusEl.textContent = 'ไม่พบโปรเจกนี้ — กรอกเองได้เลย';
+      statusEl.style.color = '#888';
+      setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+    }
+  } catch(err) {
+    statusEl.style.display = 'none';
+  }
 }
 
 // ── วาง SheetDB URL ของคุณที่นี่ ──────────────────────────
