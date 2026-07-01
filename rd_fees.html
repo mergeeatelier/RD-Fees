@@ -215,6 +215,7 @@ function checkPw(){
         <div class="field">
           <label>Project ID <span class="req">*</span> <span id="pid-status" style="font-size:11px;font-weight:400;color:#3d5af1;display:none"></span></label>
           <input type="text" name="project_id" id="project_id" placeholder="e.g. PJ2026062701"
+            oninput="clearProjectFields()"
             onblur="lookupProjectInfo()"
             onkeydown="if(event.key==='Enter'){event.preventDefault();lookupProjectInfo();}">
         </div>
@@ -492,6 +493,19 @@ function calcFee(){
   document.getElementById('fb3').textContent='×'+tl.toFixed(2);
   document.getElementById('fb4').textContent='×'+ip.toFixed(2);
   document.getElementById('feeBreakdown').style.display='grid';
+}
+
+// ── Clear info fields เมื่อ Project ID เปลี่ยน ──
+function clearProjectFields() {
+  ['f_project_name','f_company','f_contact_person','f_email','f_phone',
+   'f_submission_date','f_target_completion_date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('title-pid').textContent = '';
+  const statusEl = document.getElementById('pid-status');
+  statusEl.textContent = '';
+  statusEl.style.display = 'none';
 }
 
 // ── Auto-fill: ดึงข้อมูลจาก Google Sheet เมื่อใส่ Project ID ──
